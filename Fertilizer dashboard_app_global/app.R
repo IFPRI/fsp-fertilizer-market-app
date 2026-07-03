@@ -28,20 +28,20 @@ options(scipen = 999)
 # ── Data loading ──────────────────────────────────────────────────────────────
 today <- Sys.Date()
 
-load(file = "./countryShapeFiles.RData")
+load(file = "data/countryShapeFiles.RData")
 world <- sf::st_cast(world, "MULTIPOLYGON")
 
 world_forDepRatio <- world %>%
   dplyr::rename("Country_Code" = ISO3_CODE)
 
-countryClassificationImported <- readRDS("countryClassification.rds")
+countryClassificationImported <- readRDS("data/countryClassification.rds")
 countryClassification <- countryClassificationImported %>%
   select(ISO3Code, WBIncomeClassification) %>%
   dplyr::rename(ISO3_CODE = ISO3Code) %>%
   filter(!is.na(ISO3_CODE))
 
 # Fertilizer and natural gas prices from WB Pink Sheets
-WB_pricesImported <- readRDS("WBPinkSheetFertilizer_clean.rds")
+WB_pricesImported <- readRDS("data/WBPinkSheetFertilizer_clean.rds")
 
 WB_fertilizer_prices <- WB_pricesImported %>%
   filter(Commodity %in% c("DAP", "TSP", "Urea", "Potassium chloride")) %>%
@@ -55,11 +55,11 @@ WB_pricesIndexed <- WB_pricesImported %>%
   filter(str_detect(Unit, "Index")) %>%
   filter(!Commodity %in% c("Crude oil, average", "Natural gas index", "Phosphate rock"))
 
-prices         <- readRDS("prices.rds")
-fertilizer.use <- readRDS("FertilizerUse.rds")
+prices         <- readRDS("data/prices.rds")
+fertilizer.use <- readRDS("data/FertilizerUse.rds")
 usebroad       <- fertilizer.use
 
-applicationImported <- readRDS("application.rds")
+applicationImported <- readRDS("data/application.rds")
 application         <- applicationImported
 
 applicationForYield <- application %>%
