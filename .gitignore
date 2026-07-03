@@ -28,3 +28,13 @@
 # --- OS cruft ---
 .DS_Store
 Thumbs.db
+
+# --- Data caches, reports, and office docs: not source, kept locally only ---
+*.rds
+*.RData
+*.csv
+*.xlsx
+*.xls
+*.docx
+*.pptm
+*.html
