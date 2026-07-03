@@ -27,9 +27,6 @@ library(ggplot2)
 library(viridis)
 library(ggiraph)
 
-#connecting
-library(RMySQL)
-
 #other
 library(shinyBS)
 library(shinycssloaders)
@@ -43,21 +40,8 @@ library(shinydashboard)
 
 
 
-ADBCountries <- readRDS("ADBcountries.rds")
+ADBCountries <- readRDS("data/ADBcountries.rds")
 asia_pacific_iso3<- ADBCountries
-
-load(file="./connection.RData")
-
-mysqlconnection = dbConnect(RMySQL::MySQL(),
-                            dbname= connection$dbname,
-                            host=connection$host,
-                            port=connection$port,
-                            user=connection$user,
-                            password=connection$password
-                            )
-
-# close db connection after function call exits
-on.exit(dbDisconnect(mysqlconnection))
 
 ####Importing data####
 
@@ -74,8 +58,8 @@ today <- Sys.Date()
 #p_fert <- read_excel('./Fertilizers all v2.xlsx')
 #load(file="./p_fert.RData")
 #world map data (new version)
-#world <- gisco_get_countries(year = "2016") 
-load(file="./countryShapeFiles.RData")
+#world <- gisco_get_countries(year = "2016")
+load(file="data/countryShapeFiles.RData")
 
 world = sf::st_cast(world, "MULTIPOLYGON")
 
@@ -83,33 +67,19 @@ world_forDepRatio <- world %>%
   dplyr::rename(Country_Code= ISO3_CODE)
 
 
-# load(file="./imports.RData")
-# load(file="./fertilizer_use.RData" )
-# load(file= "./products.RData"   )
-#prices <- range_read("https://docs.google.com/spreadsheets/d/1lXiUYRLjQD_SNohh1uXLFvpryfBcNU_NwamBS1CfVT8/edit?usp=sharing", sheet = 8)
+prices <- readRDS("data/prices.rds")
 
-
-#from database
-result_fertPrices <- dbSendQuery(mysqlconnection, "select * from FERTILIZERPRICESPROCESSEDVERMAR23") # write query to access the records from a particular table.
-prices <- fetch(result_fertPrices, n=-1)
-
-result_fertUse <- dbSendQuery(mysqlconnection, "select * from FAOFERTILIZERUSEPROCESSED") # write query to access the records from a particular table.
-fertilizer.use <- fetch(result_fertUse, n=-1) %>%
+fertilizer.use <- readRDS("data/FertilizerUse.rds") %>%
   filter(Country_Code %in% asia_pacific_iso3)
 usebroad <- fertilizer.use %>%
   filter(Country_Code %in% asia_pacific_iso3)
 
-result_fertApplication <- dbSendQuery(mysqlconnection, "select * from FAOFERTILIZERAPPLICATIONPROCESSED") # write query to access the records from a particular table.
-application <- fetch(result_fertApplication, n=-1) %>%
+application <- readRDS("data/application.rds") %>%
   filter(Country_Code %in% asia_pacific_iso3)
-#importdep <- range_read("https://docs.google.com/spreadsheets/d/1lXiUYRLjQD_SNohh1uXLFvpryfBcNU_NwamBS1CfVT8/edit?usp=sharing", sheet = 10)
-#usebroad <- range_read("https://docs.google.com/spreadsheets/d/1lXiUYRLjQD_SNohh1uXLFvpryfBcNU_NwamBS1CfVT8/edit?usp=sharing", sheet = 5)
-
-#dbDisconnect(mysqlconnection)
 
 #### Price ####
 #fert and natGasPrices from WB pink sheets
-WB_pricesImported <-readRDS("WBPinkSheetFertilizer_clean.rds") 
+WB_pricesImported <-readRDS("data/WBPinkSheetFertilizer_clean.rds")
 WB_fertilizer_prices <- WB_pricesImported %>%
   filter(Commodity %in% c(#"Phosphate rock", 
     "DAP", "TSP", 

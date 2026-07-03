@@ -13,11 +13,8 @@
 **/.Rproj.user/
 .RData
 
-# --- renv vendored package library (regenerate with renv::restore()) ---
-**/renv/library/
-**/renv/staging/
-**/renv/sandbox/
-**/renv/python/
+# --- renv (config + vendored package library): not needed in the repo ---
+**/renv/
 
 # --- rsconnect deployment metadata (account/app IDs, not app code) ---
 **/rsconnect/
@@ -38,3 +35,7 @@ Thumbs.db
 *.docx
 *.pptm
 *.html
+
+# --- Static assets (images, misc files): not needed in the repo ---
+**/www/
+**/other files/
