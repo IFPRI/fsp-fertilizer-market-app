@@ -1,0 +1,30 @@
+# --- Secrets / credentials: never commit ---
+**/connection.RData
+**/connection_old.RData
+.Renviron
+**/.Renviron
+*.pem
+*.ppk
+
+# --- R session / IDE state ---
+.Rhistory
+**/.Rhistory
+.Rproj.user/
+**/.Rproj.user/
+.RData
+
+# --- renv vendored package library (regenerate with renv::restore()) ---
+**/renv/library/
+**/renv/staging/
+**/renv/sandbox/
+**/renv/python/
+
+# --- rsconnect deployment metadata (account/app IDs, not app code) ---
+**/rsconnect/
+
+# --- Dropbox sync internals ---
+**/.dropbox.cache/
+
+# --- OS cruft ---
+.DS_Store
+Thumbs.db
